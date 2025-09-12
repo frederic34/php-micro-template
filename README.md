@@ -1,5 +1,5 @@
 [![Latest Version](https://img.shields.io/packagist/v/wol-soft/php-micro-template.svg)](https://packagist.org/packages/wol-soft/php-micro-template)
-[![Maintainability](https://api.codeclimate.com/v1/badges/9e3c565c528edb3d58d5/maintainability)](https://codeclimate.com/github/wol-soft/php-micro-template/maintainability)
+[![Maintainability](https://qlty.sh/gh/wol-soft/projects/php-micro-template/maintainability.svg)](https://qlty.sh/gh/wol-soft/projects/php-micro-template)
 [![Build Status](https://github.com/wol-soft/php-micro-template/actions/workflows/main.yml/badge.svg)](https://github.com/wol-soft/php-micro-template/actions/workflows/main.yml)
 [![Coverage Status](https://coveralls.io/repos/github/wol-soft/php-micro-template/badge.svg?branch=master)](https://coveralls.io/github/wol-soft/php-micro-template?branch=master)
 [![MIT License](https://img.shields.io/packagist/l/wol-soft/php-micro-template.svg)](https://github.com/wol-soft/php-micro-template/blob/master/LICENSE)
