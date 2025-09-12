@@ -177,7 +177,7 @@ class Render
 
                     $orBranches = [];
                     foreach (explode(' or ', $matches['condition']) as $orLinkedCondition) {
-                        $andBranches = [];
+                        $andBranchTrue = true;
 
                         foreach (explode(' and ', $orLinkedCondition) as $condition) {
                             if (!preg_match(
@@ -188,11 +188,12 @@ class Render
                                 throw new SyntaxErrorException("Invalid condition {$matches['condition']}");
                             }
 
-                            $andBranches[] = (
-                                !empty($conditionMatches['not']) xor $this->getValue($conditionMatches, $variables)
-                            );
+                            if(empty($conditionMatches['not']) xor $this->getValue($conditionMatches, $variables)) {
+                                $andBranchTrue = false;
+                                break;
+                            }
                         }
-                        $orBranches[] = !in_array(false, $andBranches);
+                        $orBranches[] = $andBranchTrue;
                     }
 
                     if (in_array(true, $orBranches)) {
