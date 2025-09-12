@@ -116,6 +116,39 @@ class RenderTest extends TestCase
     }
 
     /**
+     * @dataProvider conditionalsDataProvider
+     */
+    public function testConditionals(string $condition, string $expectedResult): void
+    {
+        $this->assertSame(
+            $expectedResult,
+            $this->render->renderTemplateString("{% if $condition %}true{% else %}false{% endif %}", ['true' => true])
+        );
+    }
+
+    public function conditionalsDataProvider(): array
+    {
+        return [
+            'simple true'    => ['true', 'true'],
+            'simple not'     => ['not true', 'false'],
+            'and both false' => ['not true and not true', 'false'],
+            'and one false'  => ['not true and true', 'false'],
+            'and both true'  => ['true and true', 'true'],
+            'or both false' => ['not true or not true', 'false'],
+            'or one false'  => ['not true or true', 'true'],
+            'or both true'  => ['true or true', 'true'],
+            'and before or' => ['not true and true or not true', 'false'],
+        ];
+    }
+
+    public function testInvalidConditionalThrowsSyntaxError(): void
+    {
+        $this->expectException(SyntaxErrorException::class);
+        $this->expectExceptionMessage('Invalid condition object.bla(');
+        $this->render->renderTemplateString('{% if object.bla( %}content{% endif %}');
+    }
+
+    /**
      * Test if the syntax of a template is whitespace tolerant
      */
     public function testWhitespaceTolerance(): void

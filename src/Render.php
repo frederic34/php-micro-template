@@ -169,14 +169,33 @@ class Render
     {
         do {
             $template = preg_replace_callback(
-                '/\{%\s*if(?<index>-[\d]+-[\d]+-)\s+(?<not>not\s+)?' . self::REGEX_VARIABLE . '\s*%\}' .
+                '/\{%\s*if(?<index>-[\d]+-[\d]+-)\s+(?<condition>.+?)\s*%\}' .
                     '(?<body>.+)' .
                 '\{%\s*endif\k<index>\s*%\}/si',
                 function (array $matches) use ($variables): string {
                     $conditionalBody = preg_split("/{%\s*else{$matches['index']}\s*%\}/si", $matches['body']);
-                    $ifCondition = $this->getValue($matches, $variables);
 
-                    if (!empty($matches['not']) xor $ifCondition) {
+                    $orBranches = [];
+                    foreach (explode(' or ', $matches['condition']) as $orLinkedCondition) {
+                        $andBranches = [];
+
+                        foreach (explode(' and ', $orLinkedCondition) as $condition) {
+                            if (!preg_match(
+                                '/^\s*(?<not>not\s+)?' . self::REGEX_VARIABLE . '\s*$/si',
+                                $condition,
+                                $conditionMatches
+                            )) {
+                                throw new SyntaxErrorException("Invalid condition {$matches['condition']}");
+                            }
+
+                            $andBranches[] = (
+                                !empty($conditionMatches['not']) xor $this->getValue($conditionMatches, $variables)
+                            );
+                        }
+                        $orBranches[] = !in_array(false, $andBranches);
+                    }
+
+                    if (in_array(true, $orBranches)) {
                         return $conditionalBody[0];
                     }
 

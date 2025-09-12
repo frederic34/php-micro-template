@@ -5,7 +5,7 @@
 [![MIT License](https://img.shields.io/packagist/l/wol-soft/php-micro-template.svg)](https://github.com/wol-soft/php-micro-template/blob/master/LICENSE)
 
 # php-micro-template
-A minimalistic, lightweight templating engine for PHP based on regular expressions.
+A minimalistic, lightweight templating engine for PHP with zero dependencies based on regular expressions.
 
 ## Features ##
 
@@ -210,6 +210,14 @@ Multiple if statements can be nested. To invert an if condition the keyword *not
 
 ```html
 {% if not product.isVisible() %}
+    <span>Product {{ product.getTitle() }} currently not available</span>
+{% endif %}
+```
+
+To compose multiple conditions in a single if, the keywords *and* and *or* can be used (*and* has the higher precedence). Brackets in if statements are not supported.
+
+```html
+{% if not product.isVisible() or not product.isAvailable() %}
     <span>Product {{ product.getTitle() }} currently not available</span>
 {% endif %}
 ```
